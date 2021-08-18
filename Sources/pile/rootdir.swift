@@ -1,14 +1,14 @@
 import Foundation
 
-func getRootDirName() -> String {
-    var dir = FileManager.default.currentDirectoryPath
+func getRootDirName() -> URL {
+    var dir = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     while true {
         do {
-            let dirContent = try FileManager.default.contentsOfDirectory(atPath: dir)
+            let dirContent = try FileManager.default.contentsOfDirectory(atPath: dir.path)
             if dirContent.contains(".pile") {
                  return dir
             }
-            dir = URL(fileURLWithPath: dir).deletingLastPathComponent().path
+            dir = dir.deletingLastPathComponent()
         } catch {
             print(error)
         }
