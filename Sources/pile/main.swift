@@ -1,2 +1,6 @@
 print("Hello, world!")
-print(getAllFilesInDirectory(getRootDirName()))
+let blocks = parsePile()
+for block in blocks {
+    print(formatBlock(block))
+    print("---")
+}

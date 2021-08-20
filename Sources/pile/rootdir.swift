@@ -1,6 +1,6 @@
 import Foundation
 
-func getRootDirName() -> URL {
+func getRootDir() -> URL {
     var dir = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     while true {
         do {
