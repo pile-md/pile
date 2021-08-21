@@ -24,5 +24,5 @@ func parseFile(_ fileURL: URL) -> [Block] {
 
 func parseTags(_ block: String) -> [String] {
     let words = block.replacingOccurrences(of: "\n", with: " ").components(separatedBy: " ")
-    return words.filter {$0.matches(#"#\w+"#)}
+    return words.filter {$0.matches(#"^#\w+$"#)}
 }
