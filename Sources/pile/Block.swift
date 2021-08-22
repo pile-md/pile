@@ -1,7 +1,7 @@
 import Foundation
 
 class Block {
-    let parent: Block?
+    var parent: Block?
     let type: BlockType
     let path: String
     let body: String
