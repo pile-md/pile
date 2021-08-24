@@ -12,7 +12,7 @@ func runQuery(_ query: String) throws -> [String] {
 // Inspired by https://whatdidilearn.info/2018/07/29/how-to-capture-regex-group-values-in-swift.html
 func extractTag(_ query: String) throws -> String {
 
-    let pattern = #"SELECT WHERE hasTag\((?<tag>\w+)\)"#
+    let pattern = #"SELECT WHERE hasTag\('(?<tag>\w+)'\)"#
     let regex = try? NSRegularExpression(pattern: pattern)
 
     if let match = regex?.firstMatch(in: query, options: [], range: NSRange(location: 0, length: query.count)) {
