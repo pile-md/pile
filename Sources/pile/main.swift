@@ -1,8 +1,5 @@
-//print(try extractTag("SELECT WHERE hasTag(foo)"))
+import Backtrace
 
-//print("type, parent, content")
-//for block in parsePile() {
-//    print("\(block.type), \(block.parent?.body.truncate(length: 10) ?? "nil"), \(block.body.truncate(length: 30))")
-//}
+Backtrace.install()
 
 CLI.main()

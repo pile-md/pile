@@ -8,7 +8,7 @@ extension CLI {
 
         func run() throws {
             var isFirst = true
-            for block in try runQuery(query) {
+            for block in runQuery(query) {
                 if !isFirst {
                     print("====")
                 }

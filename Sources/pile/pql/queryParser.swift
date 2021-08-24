@@ -1,11 +1,16 @@
 import Foundation
 
-func runQuery(_ query: String) throws -> [String] {
-    let tag = try extractTag(query)
-    return parsePile().filter {
-        $0.tags.contains(tag)
-    }.map {
-        $0.fullBody
+func runQuery(_ query: String) -> [String] {
+    do {
+        let tag = try extractTag(query)
+        return parsePile().filter {
+            $0.tags.contains(tag)
+        }.map {
+            $0.fullBody
+        }
+    } catch {
+        print(error)
+        return []
     }
 }
 

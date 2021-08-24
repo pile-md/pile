@@ -28,7 +28,14 @@ func parseFile(_ fileURL: URL) -> [Block] {
                     type: determineHeadingLevel(bStr) == 0 ? .paragraph : .section,
                     path: fileURL.path, body: bStr, tags: parseTags(bStr))
             if currentBlock.type == .section {
-                let parent = currentHeadingLevel < 2 ? nil : headingStack.storage[currentHeadingLevel - 2]
+                var parent: Block? = nil
+                if currentHeadingLevel >= 2 {
+                    if headingStack.storage.count < currentHeadingLevel - 1 || currentHeadingLevel - 2 < 0{
+                        print("Error in parsing \(fileURL)")
+                        return []
+                    }
+                    parent = headingStack.storage[currentHeadingLevel - 2]
+                }
                 currentBlock.parent = parent
                 parent?.children.append(currentBlock)
             } else if currentBlock.type == .paragraph {
@@ -57,6 +64,7 @@ func parseFile(_ fileURL: URL) -> [Block] {
         }
         return blocks
     } catch {
+        print("Failed to parse \(fileURL)")
         print(error)
         return []
     }
