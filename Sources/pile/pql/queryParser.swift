@@ -5,7 +5,7 @@ func runQuery(_ query: String) throws -> [String] {
     return parsePile().filter {
         $0.tags.contains(tag)
     }.map {
-        $0.body
+        $0.fullBody
     }
 }
 

@@ -2,6 +2,7 @@ import Foundation
 
 class Block {
     var parent: Block?
+    var children = [Block]()
     let type: BlockType
     let path: String
     let body: String
@@ -13,6 +14,16 @@ class Block {
         self.path = path
         self.body = body
         self.tags = tags
+    }
+
+    var fullBody: String {
+        let childBodies = children.map {$0.fullBody}
+        var result = body
+        for c in childBodies {
+            result += "\n\n"
+            result += c
+        }
+        return result
     }
 }
 
