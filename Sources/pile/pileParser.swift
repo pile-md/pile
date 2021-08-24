@@ -16,7 +16,6 @@ func parseFile(_ fileURL: URL) -> [Block] {
         var blocks = [Block]()
         var headingStack = Stack<Block>()
         // TODO add check that first block would be H1
-        print(blockStrings)
         for bStr in blockStrings {
             let lastHeadingLevel = headingStack.count
             let currentHeadingLevel = determineHeadingLevel(bStr)
@@ -25,7 +24,6 @@ func parseFile(_ fileURL: URL) -> [Block] {
                 print("STYLE WARNING: too many blank lines")
                 continue
             }
-            print("currentHeadingLevel: \(currentHeadingLevel), stack has \(headingStack.storage)")
             let currentBlock = Block(parent: nil,
                     type: determineHeadingLevel(bStr) == 0 ? .paragraph : .section,
                     path: fileURL.path, body: bStr, tags: parseTags(bStr))
@@ -37,19 +35,21 @@ func parseFile(_ fileURL: URL) -> [Block] {
                 print("UNHANDLED!")
             }
             blocks.append(currentBlock)
-            // E.g. one ## is over and another ## starts
-            if currentHeadingLevel == lastHeadingLevel {
-                headingStack.replaceLast(currentBlock)
-            }
-            // E.g. under a higher ## there is a smaller ###
-            else if currentHeadingLevel == lastHeadingLevel + 1 {
-                headingStack.push(currentBlock)
-            }
-            // E.g. An #### is over and a new ## starts
-            else if currentHeadingLevel < lastHeadingLevel {
-                headingStack.preserveFirst(determineHeadingLevel(bStr))
-            } else {
-                print("MARKDOWN ERROR: a \(currentHeadingLevel). level heading cannot follow a \(lastHeadingLevel). level heading.")
+            if currentBlock.type == .section {
+                // E.g. one ## is over and another ## starts
+                if currentHeadingLevel == lastHeadingLevel {
+                    headingStack.replaceLast(currentBlock)
+                }
+                // E.g. under a higher ## there is a smaller ###
+                else if currentHeadingLevel == lastHeadingLevel + 1 {
+                    headingStack.push(currentBlock)
+                }
+                // E.g. An #### is over and a new ## starts
+                else if currentHeadingLevel < lastHeadingLevel {
+                    headingStack.preserveFirst(determineHeadingLevel(bStr))
+                } else {
+                    print("MARKDOWN ERROR: a \(currentHeadingLevel). level heading cannot follow a \(lastHeadingLevel). level heading.")
+                }
             }
         }
         return blocks
@@ -62,6 +62,8 @@ func parseFile(_ fileURL: URL) -> [Block] {
 func parseTags(_ block: String) -> [String] {
     block.words().filter {
         $0.matches(#"^#\w+$"#)
+    }.map {
+        String($0.dropFirst())
     }
 }
 

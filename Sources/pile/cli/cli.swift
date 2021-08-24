@@ -8,6 +8,6 @@ struct CLI: ParsableCommand {
             abstract: "A knowledgebase management tool",
             // Commands can define a version for automatic '--version' support.
             version: "0.1",
-            subcommands: [Show.self]
+            subcommands: [Show.self, Query.self]
     )
 }
