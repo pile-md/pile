@@ -30,11 +30,7 @@ func parseFile(_ fileURL: URL) -> [Block] {
             if currentBlock.type == .section {
                 var parent: Block? = nil
                 if currentHeadingLevel >= 2 {
-                    if headingStack.storage.count < currentHeadingLevel - 1 || currentHeadingLevel - 2 < 0{
-                        print("Error in parsing \(fileURL)")
-                        return []
-                    }
-                    parent = headingStack.storage[currentHeadingLevel - 2]
+                    parent = try headingStack.storage.get(index: currentHeadingLevel - 2)
                 }
                 currentBlock.parent = parent
                 parent?.children.append(currentBlock)
@@ -58,14 +54,13 @@ func parseFile(_ fileURL: URL) -> [Block] {
                 else if currentHeadingLevel < lastHeadingLevel {
                     headingStack.preserveFirst(determineHeadingLevel(bStr))
                 } else {
-                    print("MARKDOWN ERROR: a \(currentHeadingLevel). level heading cannot follow a \(lastHeadingLevel). level heading.")
+                    logger.notice("MARKDOWN ERROR: a \(currentHeadingLevel). level heading cannot follow a \(lastHeadingLevel). level heading.")
                 }
             }
         }
         return blocks
     } catch {
-        print("Failed to parse \(fileURL)")
-        print(error)
+        logger.error("Failed to parse \(fileURL.path): \(error)")
         return []
     }
 }
